@@ -33,10 +33,6 @@ A bounding box with a score over 0.5 is chosen for color classification. In the 
 
 For real world images, the detection/classification failure rate is 1% for red light images, 0% for yellow light images, 0% for green light images, and 0% for images with no lights. The red light failures are missed detections (some due to occlusions), where processing subsequent images succeeds.
 
-**IMPORTANT NOTE ON TESTING**
-
-There are separate detection/classification models for the simulator and the real world. To test with the simulator, set "SIMULATOR_MODEL = True" in tl_classifier.py. To test in the real world, set "SIMULATOR_MODEL = False".
-
 ### 3. Updating Waypoints:
 
 Once the traffic light state is detected from the subscribed image using the light classifier, if it is detected as red, corresponding waypoint computed using data from `/traffic_light_config`.  Here, we identify closest waypoint associated with traffic light from the car's current position. After some experimentation, we decided to use a threshold of 2. It means, traffic light needs to be detected as red at least two times before publishing corresponding waypoint ``/traffic_waypoint`` topic.  
