@@ -13,6 +13,13 @@ from PIL import Image
 
 SIMULATOR_MODEL = False
 
+launch_mode = rospy.get_param("/launch_mode")
+if launch_mode == "site":
+    SIMULATOR_MODEL = False
+elif launch_mode == "styx":
+    SIMULATOR_MODEL = True
+
+
 class TLClassifier(object):
     def __init__(self):
         # TODO load classifier

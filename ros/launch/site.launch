@@ -23,4 +23,7 @@
 
     <!--Camera Info Publisher -->
     <include file="$(find camera_info_publisher)/launch/camera_info_publisher.launch"/>
+
+    <!--Launch Mode for Detection Model -->
+    <param name="launch_mode" value="site" />
 </launch>
