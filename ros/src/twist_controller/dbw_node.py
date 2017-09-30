@@ -57,8 +57,8 @@ class DBWNode(object):
         self.brake_pub = rospy.Publisher('/vehicle/brake_cmd',
                                          BrakeCmd, queue_size=1)
 
-        self.controller = Controller(vehicle_mass, fuel_capacity, brake_deadband, decel_limit, accel_limit, wheel_radius, wheel_base,
-                                        steer_ratio, max_lat_accel, max_steer_angle)
+        self.controller = Controller(self.vehicle_mass, self.fuel_capacity, self.brake_deadband, self.decel_limit, self.accel_limit, self.wheel_radius, self.wheel_base,
+                                        self.steer_ratio, self.max_lat_accel, self.max_steer_angle)
 
         self.twist_cmd = None
         rospy.Subscriber('/twist_cmd', TwistStamped, self.twist_cb)
@@ -88,7 +88,7 @@ class DBWNode(object):
                 if self.dbw_enabled == True:
                   if DEBUG:
                     rospy.logerr('throttle: {}, brake: {}'.format(throttle, brake))
-                  throttle = np.min(throttle, self.max_throttle_percentage)
+                  throttle = np.minimum(throttle, self.max_throttle_percentage)
                   self.publish(throttle, brake, steer)
                 else:
                   self.controller.pid_reset()
