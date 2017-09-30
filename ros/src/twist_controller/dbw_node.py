@@ -38,6 +38,13 @@ class DBWNode(object):
     def __init__(self):
         rospy.init_node('dbw_node')
 
+        self.simulator_model = False
+        launch_mode = rospy.get_param("/launch_mode")
+        if launch_mode == "site":
+            self.simulator_model = False
+        elif launch_mode == "styx":
+            self.simulator_model = True
+
         self.vehicle_mass = rospy.get_param('~vehicle_mass', 1736.35)
         self.fuel_capacity = rospy.get_param('~fuel_capacity', 13.5)
         self.brake_deadband = rospy.get_param('~brake_deadband', .1)
@@ -88,7 +95,9 @@ class DBWNode(object):
                 if self.dbw_enabled == True:
                   if DEBUG:
                     rospy.logerr('throttle: {}, brake: {}'.format(throttle, brake))
-                  throttle = np.minimum(throttle, self.max_throttle_percentage)
+                  # strong limit on throttle control for real vehicle
+                  if not self.simulator_model:
+                    throttle = np.minimum(throttle, self.max_throttle_percentage)
                   self.publish(throttle, brake, steer)
                 else:
                   self.controller.pid_reset()
