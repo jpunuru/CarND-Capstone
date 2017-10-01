@@ -28,7 +28,7 @@ TODO (for Yousuf and Aaron): Stopline location for each traffic light.
 
 LOOKAHEAD_WPS = 50 # Number of waypoints we will publish. You can change this number
 DEBUG         = False
-SPEED_LIMIT   = 6  # 10 mp/h
+SPEED_LIMIT   = 4.5 
 STOP_DIST     = 30 # wp count
 
 class WaypointUpdater(object):
