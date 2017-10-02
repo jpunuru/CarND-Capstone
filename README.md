@@ -7,7 +7,12 @@ _____________________________________________________
   4. Marcus Erbar ( marcus.erbar@gmail.com )
   5. James Jackson ( fiberhog@gmail.com )
 
+## Update:
+1. Modified styx.launch and site.launch  to load corresponding  model for light classification.
+2. Limit accelerator actuation dbw_node.py
+3. Reduced speed limit for site launch to 7.5mph 
 
+####################
 ## Overview:
 Main goal of this project is to implement modules in ros for self driving system to follow waypoints , detect traffic lights, and control the vehicle based on the status of the traffic light. As described in the project, it is divided into three components described below.
 
