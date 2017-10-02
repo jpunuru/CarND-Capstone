@@ -24,9 +24,8 @@ class Controller(object):
 
         self.pid_velocity = PID(0.05, 0.0, 0.01)
         self.pid_steering = PID(10.0, 0.0, 1.0)
-        self.lowpass_velocity = LowPassFilter(13)
-        self.lowpass_steering = LowPassFilter(4)
-
+        sample_time = 0.02 # 1.0 / 50 (hz)
+        self.lowpass_velocity = LowPassFilter(self.accel_limit, sample_time)
 
     def control(self, *args, **kwargs):
     	""" vehicle controller
@@ -51,7 +50,6 @@ class Controller(object):
 
         steer_error = target_steer
         steer = self.pid_steering.step(steer_error, time_elapsed)
-        steer = self.lowpass_steering.filt(steer)
 
         if DEBUG:
         	rospy.logerr('ctrl velocity: {}'.format(velocity))

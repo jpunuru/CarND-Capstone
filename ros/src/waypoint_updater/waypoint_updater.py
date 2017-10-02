@@ -28,20 +28,26 @@ TODO (for Yousuf and Aaron): Stopline location for each traffic light.
 
 LOOKAHEAD_WPS = 50 # Number of waypoints we will publish. You can change this number
 DEBUG         = False
-SPEED_LIMIT   = 4.5 
 STOP_DIST     = 30 # wp count
 
 class WaypointUpdater(object):
     def __init__(self):
+        rospy.init_node('waypoint_updater')
+
         self.cur_pose = None
         self.base_waypoints = None
         self.next_waypoints = None
         self.is_signal_red = False
         self.prev_pose = None
         self.move_car = False
-        self.f_sp = None
+        self.f_sp = None        
 
-        rospy.init_node('waypoint_updater')
+        launch_mode = rospy.get_param("/launch_mode")
+        self.speed_limit = 4.5
+        if launch_mode == "site":
+            self.speed_limit = 4.5
+        elif launch_mode == "styx":
+            self.speed_limit = 6.0
 
         rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         self.base_waypoints_sub = rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
@@ -73,8 +79,8 @@ class WaypointUpdater(object):
                         # sp_x = [waypoints[next_wp_i].pose.pose.position.x, waypoints[self.red_wp_i].pose.pose.position.x]
                         sp_wp_i = [to_red_wp_count, 0]
                         next_wp_velocity = self.get_waypoint_velocity(self.base_waypoints.waypoints[next_wp_i])
-                        if next_wp_velocity > SPEED_LIMIT:
-                            next_wp_velocity = SPEED_LIMIT
+                        if next_wp_velocity > self.speed_limit:
+                            next_wp_velocity = self.speed_limit
                         sp_v = [next_wp_velocity, 0.0]
                         self.f_sp = interp1d(sp_wp_i, sp_v)
                     for cur_wp_i in range(to_red_wp_count):
@@ -94,10 +100,10 @@ class WaypointUpdater(object):
                         rospy.logerr('normal drive')
                     for cur_wp_i in range(LOOKAHEAD_WPS):
                         next_wp_velocity = self.get_waypoint_velocity(self.base_waypoints.waypoints[next_wp_i])
-                        if next_wp_velocity > SPEED_LIMIT:
-                            next_wp_velocity = SPEED_LIMIT
+                        if next_wp_velocity > self.speed_limit:
+                            next_wp_velocity = self.speed_limit
                         next_waypoints.append(waypoints[next_wp_i])
-                        self.set_waypoint_velocity(next_waypoints, cur_wp_i, SPEED_LIMIT)
+                        self.set_waypoint_velocity(next_waypoints, cur_wp_i, self.speed_limit)
                         next_wp_i = (next_wp_i + 1) % nb_waypoints
                     self.f_sp = None
 
