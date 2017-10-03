@@ -186,7 +186,7 @@ class TLDetector(object):
         light_distance_squared  = 10000*MAX_DIST
 
 
-        if( (self.pose) and (len(self.lights) > 0)):
+        if( (self.pose) and (len(self.lights) > 0)) and (len(self.lights) == len(light_positions)):
             car_position = self.get_closest_waypoint(self.pose.pose.position)
 
             #TODO find the closest visible traffic light (if one exists)
